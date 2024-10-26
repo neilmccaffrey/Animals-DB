@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Dropdown from "./components/Dropdown";
 import styles from './App.module.css';
+import axios from 'axios';
 
 export default function App() {
   const [filters, setFilters] = useState({
@@ -9,10 +10,7 @@ export default function App() {
     Type: '',
     Diet: ''
   });
-
-  useEffect(() => {
-    console.log('Filters updated:', filters);
-  }, [filters]);
+  const [animals, setAnimals] = useState([]);
 
   const handleSelect = (dropdownLabel, value) => {
     // Update the corresponding filter in the state
@@ -23,7 +21,21 @@ export default function App() {
   }
 
   const handleClick = () => {
-    alert("clicked");
+    // Create a params object with only non-empty filter values
+  const params = {};
+  Object.keys(filters).forEach((key) => {
+    if (filters[key]) {
+      params[key.toLowerCase()] = filters[key]; // Convert key to lowercase for backend compatibility
+    }
+  });
+
+  // Send request to backend with selected filters
+  axios
+    .get(`http://localhost:3001/search`, { params })
+    .then((response) => {
+      setAnimals(response.data); // Update state with search results
+    })
+    .catch((error) => console.error('Error fetching animals:', error));
   }
 
     
@@ -41,7 +53,7 @@ export default function App() {
     />
     <Dropdown 
     label="Type" 
-    options={['Mammals', 'Birds', 'Reptiles', 'Amphibians']}
+    options={['Mammal', 'Bird', 'Reptile', 'Amphibian']}
     onSelect={handleSelect} 
     />
     <Dropdown 
@@ -50,6 +62,14 @@ export default function App() {
     onSelect={handleSelect} 
     />
     <button className={styles.button} onClick={handleClick}>Search</button>
+
+    <ul>
+        {animals.map((animal) => (
+          <li key={animal.id}>
+            {animal.name} - {animal.size} - {animal.continent} - {animal.diet} - {animal.type}
+          </li>
+        ))}
+    </ul>
     </div>
   );
 }
