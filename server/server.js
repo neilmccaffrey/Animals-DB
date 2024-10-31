@@ -92,7 +92,7 @@ app.get('/search', (req, res) => {
   };
   
   // add an animal ***COMMENT OUT AFTER ADDING***
-  //addAnimal('Elephant', 'Extra Large', 'Mammal', 'Herbivore', 'Africa', 'images/elephant.jpg' );
+  //addAnimal('Meerkat', 'Small', 'Mammal', 'Insectivore', 'Africa', 'images/meerkat.jpg' );
 
   // Set a port for the server to listen on
 const PORT = process.env.PORT || 3001;

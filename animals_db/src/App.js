@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Dropdown from "./components/Dropdown";
 import styles from './App.module.css';
 import axios from 'axios';
+import Card from "./components/Card";
 
 export default function App() {
   const [filters, setFilters] = useState({
@@ -40,6 +41,7 @@ export default function App() {
 
     
   return (
+    <>
     <div className={styles.row}>
     <Dropdown 
     label="Size" 
@@ -62,14 +64,12 @@ export default function App() {
     onSelect={handleSelect} 
     />
     <button className={styles.button} onClick={handleClick}>Search</button>
-
-    <ul>
-        {animals.map((animal) => (
-          <li key={animal.id}>
-            {animal.name} - {animal.size} - {animal.continent} - {animal.diet} - {animal.type}
-          </li>
-        ))}
-    </ul>
     </div>
+    <div className={styles.cardContainer}>
+        {animals.map((animal, idx) => (
+          <Card key={idx} name={animal.name} size={animal.size} continent={animal.continent} diet={animal.diet} type={animal.type} picture={animal.picture} />
+        ))}
+    </div>
+    </>
   );
 }
